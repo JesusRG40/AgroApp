@@ -1,0 +1,2 @@
+1. Generar componente navigation en raiz
+2. 
