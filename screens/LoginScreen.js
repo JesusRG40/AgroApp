@@ -62,7 +62,7 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.content}>
         <Text style={styles.logoText}>AgroApp</Text>
         <Image
-          source={require("../assets/logo.png")} // Actualiza con tu ruta de imagen
+          source={require("../assets/logo.png")}
           style={styles.logo}
         />
         <Text style={styles.title}>Iniciar sesión</Text>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   circle: {
     position: "absolute",
-    borderRadius: 9999, // Valor alto para asegurar que sea un círculo perfecto
+    borderRadius: 9999,
     opacity: 0.3,
   },
   circle1: {

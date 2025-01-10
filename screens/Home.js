@@ -15,8 +15,8 @@ import { auth } from "../firebaseConfig";
 const { width, height } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }) {
-  const [menuVisible, setMenuVisible] = useState(false); // Estado para mostrar/ocultar el menú
-  const [fadeAnim] = useState(new Animated.Value(0)); // Animación para los botones
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0));
 
   const handleToggleMenu = () => {
     if (menuVisible) {
@@ -58,7 +58,7 @@ export default function HomeScreen({ navigation }) {
       {/* Contenido principal */}
       <View style={styles.content}>
         <Image
-          source={require("../assets/logo.png")} // Actualiza con la ruta correcta de tu logo
+          source={require("../assets/logo.png")}
           style={styles.logo}
         />
         <Text style={styles.title}>¡Bienvenido a AgroApp!</Text>
