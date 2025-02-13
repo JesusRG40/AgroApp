@@ -1,19 +1,19 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import CultivosList from './screens/CultivosList';
-import RegistrarCultivo from './screens/RegistrarCultivo';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/Home';
-import DetailScreen from './screens/Detail';
-import EditCultivoScreen from './screens/EditCultivo'
-import RiegosList from './screens/RiegosList';
-import RiegoDetail from './screens/RiegoDetail';
-import RegistrarRiego from './screens/RegistrarRiego';
-import EditRiego from './screens/EditRiego';
-import InsumosList from './screens/InsumosList';
-import RegistrarInsumo from './screens/RegistrarInsumo';
-import InsumoDetail from './screens/InsumoDetail';
-import EditInsumo from './screens/EditInsumo';
+import CultivosList from './View/CultivosList';
+import RegistrarCultivo from './View/RegistrarCultivo';
+import LoginScreen from './View/LoginScreen';
+import HomeScreen from './View/HomeScreen';
+import DetailScreen from './View/DetailScreen';
+import EditCultivoScreen from './View/EditCultivo'
+import RiegosList from './View/RiegosList';
+import RiegoDetail from './View/RiegoDetail';
+import RegistrarRiego from './View/RegistrarRiegoScreen';
+import EditRiego from './View/EditRiegoScreen';
+import InsumosList from './View/InsumosList';
+import RegistrarInsumo from './View/RegistrarInsumoScreen';
+import InsumoDetail from './View/InsumosDetail';
+import EditInsumo from './View/EditInsumos';
 
 const Stack = createStackNavigator();
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, FlatList } from "react-native";
-import { collection, getDocs, addDoc, doc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import RiegoController from "../Controller/RegistrarRiegoController";
 
 export default function AddRiegoScreen({ navigation }) {
   const [cultivos, setCultivos] = useState([]);
@@ -12,40 +11,16 @@ export default function AddRiegoScreen({ navigation }) {
   const [metodoRiego, setMetodoRiego] = useState("");
 
   useEffect(() => {
-    const fetchCultivos = async () => {
-      try {
-        const cultivosSnapshot = await getDocs(collection(db, "cultivos"));
-        const cultivosList = cultivosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setCultivos(cultivosList);
-      } catch (error) {
-        console.error("Error al obtener cultivos: ", error);
-      }
-    };
-
-    fetchCultivos();
+    RiegoController.obtenerCultivos(setCultivos);
   }, []);
 
-  const handleAddRiego = async () => {
+  const handleAddRiego = () => {
     if (!selectedCultivo || !fechaRiego || !cantAgua || !duracionRiego || !metodoRiego) {
       Alert.alert("Error", "Todos los campos son obligatorios.");
       return;
     }
 
-    try {
-      await addDoc(collection(db, "riegos"), {
-        Cultivo: doc(db, "cultivos", selectedCultivo.id),
-        fechaRiego: new Date(fechaRiego),
-        cantAgua: parseFloat(cantAgua),
-        duracionRiego: parseInt(duracionRiego, 10),
-        metodoRiego,
-      });
-
-      Alert.alert("Éxito", "Riego registrado correctamente.");
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error al registrar riego: ", error);
-      Alert.alert("Error", "No se pudo registrar el riego.");
-    }
+    RiegoController.registrarRiego({ selectedCultivo, fechaRiego, cantAgua, duracionRiego, metodoRiego }, navigation);
   };
 
   const renderCultivoItem = ({ item }) => (
@@ -62,46 +37,19 @@ export default function AddRiegoScreen({ navigation }) {
       <Text style={styles.title}>Registrar Nuevo Riego</Text>
 
       <Text style={styles.label}>Seleccionar Cultivo:</Text>
-      <FlatList
-        data={cultivos}
-        keyExtractor={(item) => item.id}
-        renderItem={renderCultivoItem}
-        style={styles.cultivoList}
-      />
+      <FlatList data={cultivos} keyExtractor={(item) => item.id} renderItem={renderCultivoItem} style={styles.cultivoList} />
 
       <Text style={styles.label}>Fecha del Riego (YYYY-MM-DD):</Text>
-      <TextInput
-        style={styles.input}
-        value={fechaRiego}
-        onChangeText={setFechaRiego}
-        placeholder="Ingrese la fecha del riego"
-      />
+      <TextInput style={styles.input} value={fechaRiego} onChangeText={setFechaRiego} placeholder="Ingrese la fecha del riego" />
 
       <Text style={styles.label}>Cantidad de Agua (litros):</Text>
-      <TextInput
-        style={styles.input}
-        value={cantAgua}
-        onChangeText={setCantAgua}
-        placeholder="Ingrese la cantidad de agua"
-        keyboardType="numeric"
-      />
+      <TextInput style={styles.input} value={cantAgua} onChangeText={setCantAgua} placeholder="Ingrese la cantidad de agua" keyboardType="numeric" />
 
       <Text style={styles.label}>Duración del Riego (minutos):</Text>
-      <TextInput
-        style={styles.input}
-        value={duracionRiego}
-        onChangeText={setDuracionRiego}
-        placeholder="Ingrese la duración del riego"
-        keyboardType="numeric"
-      />
+      <TextInput style={styles.input} value={duracionRiego} onChangeText={setDuracionRiego} placeholder="Ingrese la duración del riego" keyboardType="numeric" />
 
       <Text style={styles.label}>Método de Riego:</Text>
-      <TextInput
-        style={styles.input}
-        value={metodoRiego}
-        onChangeText={setMetodoRiego}
-        placeholder="Ingrese el método de riego"
-      />
+      <TextInput style={styles.input} value={metodoRiego} onChangeText={setMetodoRiego} placeholder="Ingrese el método de riego" />
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddRiego}>
         <Text style={styles.addButtonText}>Registrar</Text>

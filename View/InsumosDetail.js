@@ -1,42 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { doc, getDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { fetchInsumoDetail, handleDeleteInsumo } from "../Controller/InsumosDetailController";
 
 export default function InsumoDetail({ route, navigation }) {
   const { insumoId } = route.params;
   const [insumo, setInsumo] = useState(null);
 
-  // Obtener los datos del insumo
-  const fetchInsumoDetail = async () => {
-    try {
-      const insumoDoc = await getDoc(doc(db, "insumos", insumoId));
-      if (insumoDoc.exists()) {
-        setInsumo(insumoDoc.data());
-      } else {
-        Alert.alert("Error", "Insumo no encontrado.");
-        navigation.goBack();
-      }
-    } catch (error) {
-      console.error("Error al obtener detalles del insumo: ", error);
-      Alert.alert("Error", "No se pudo obtener la información del insumo.");
-    }
-  };
-
   useEffect(() => {
-    fetchInsumoDetail();
+    fetchInsumoDetail(insumoId, setInsumo, navigation);
   }, []);
-
-  const handleDelete = async () => {
-    try {
-      await deleteDoc(doc(db, "insumos", insumoId));
-      Alert.alert("Éxito", "Insumo eliminado correctamente.");
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error al eliminar el insumo: ", error);
-      Alert.alert("Error", "No se pudo eliminar el insumo.");
-    }
-  };
 
   if (!insumo) {
     return (
@@ -80,7 +52,7 @@ export default function InsumoDetail({ route, navigation }) {
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#EF5350" }]}
-        onPress={handleDelete}
+        onPress={() => handleDeleteInsumo(insumoId, navigation)}
       >
         <Text style={styles.buttonText}>Eliminar</Text>
       </TouchableOpacity>

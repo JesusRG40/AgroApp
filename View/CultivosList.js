@@ -10,8 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { fetchCultivos } from '../Controller/CultivoController';
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,39 +19,21 @@ export default function CultivosList({ navigation }) {
   const [cultivos, setCultivos] = useState([]);
   const isFocused = useIsFocused();
 
-  // Obtener cultivos desde Firestore
-  const fetchCultivos = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'cultivos'));
-      const cultivosData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCultivos(cultivosData);
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'No se pudo cargar la lista de cultivos.');
-    }
-  };
-
   useEffect(() => {
     if (isFocused) {
-      fetchCultivos();
+      fetchCultivos(setCultivos);
     }
   }, [isFocused]);
 
-  // Filtrar cultivos según la barra de búsqueda
   const filteredCultivos = cultivos.filter((cultivo) =>
     cultivo.nombre.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
     <View style={styles.container}>
-      {/* Círculos decorativos */}
       <View style={[styles.circle, styles.circle1]} />
       <View style={[styles.circle, styles.circle2]} />
 
-      {/* Título */}
       <View style={styles.header}>
         <Text style={styles.title}>Tipos de cultivos</Text>
         <TouchableOpacity
@@ -63,7 +44,6 @@ export default function CultivosList({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Barra de búsqueda */}
       <View style={styles.searchBar}>
         <TextInput
           style={styles.searchInput}
@@ -76,7 +56,6 @@ export default function CultivosList({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Lista de cultivos */}
       <FlatList
         data={filteredCultivos}
         keyExtractor={(item) => item.id}

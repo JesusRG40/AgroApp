@@ -1,49 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { doc, getDoc, deleteDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { fetchRiegoDetail, deleteRiego } from "../Controller/RiegoDetailController";
 
 export default function RiegoDetail({ route, navigation }) {
   const { riegoId } = route.params;
   const [riego, setRiego] = useState(null);
   const [cultivoNombre, setCultivoNombre] = useState("Cargando...");
 
-  // Obtener los datos del riego
-  const fetchRiegoDetail = async () => {
-    try {
-      const riegoDoc = await getDoc(doc(db, "riegos", riegoId));
-      if (riegoDoc.exists()) {
-        const riegoData = riegoDoc.data();
-        setRiego(riegoData);
-
-        // Resolver referencia del cultivo
-        if (riegoData.Cultivo) {
-          const cultivoDoc = await getDoc(riegoData.Cultivo);
-          setCultivoNombre(cultivoDoc.exists() ? cultivoDoc.data().nombre : "No disponible");
-        } else {
-          setCultivoNombre("No disponible");
-        }
-      } else {
-        Alert.alert("Error", "Riego no encontrado.");
-        navigation.goBack();
-      }
-    } catch (error) {
-      console.error("Error al obtener detalles del riego: ", error);
-      Alert.alert("Error", "No se pudo obtener la información del riego.");
-    }
-  };
-
   useEffect(() => {
-    fetchRiegoDetail();
+    const loadRiego = async () => {
+      try {
+        const data = await fetchRiegoDetail(riegoId);
+        if (data) {
+          setRiego(data.riego);
+          setCultivoNombre(data.cultivoNombre);
+        } else {
+          Alert.alert("Error", "Riego no encontrado.");
+          navigation.goBack();
+        }
+      } catch {
+        Alert.alert("Error", "No se pudo obtener la información del riego.");
+      }
+    };
+    loadRiego();
   }, []);
 
   const handleDelete = async () => {
-    try {
-      await deleteDoc(doc(db, "riegos", riegoId));
+    if (await deleteRiego(riegoId)) {
       Alert.alert("Éxito", "Riego eliminado correctamente.");
       navigation.goBack();
-    } catch (error) {
-      console.error("Error al eliminar el riego: ", error);
+    } else {
       Alert.alert("Error", "No se pudo eliminar el riego.");
     }
   };
@@ -85,7 +71,6 @@ export default function RiegoDetail({ route, navigation }) {
         <Text style={styles.value}>{riego.metodoRiego || "No especificado"}</Text>
       </View>
 
-      {/* Botones de acción */}
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#FFA726" }]}
         onPress={() => navigation.navigate("EditRiego", { riegoId })}

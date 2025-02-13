@@ -1,23 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, Dimensions } from 'react-native';
-import { doc, deleteDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { handleEliminarCultivo } from '../Controller/DetailCultivoController';
 
 const { width } = Dimensions.get('window');
 
 export default function DetailScreen({ route, navigation }) {
   const { cultivo } = route.params; // Recibir datos del cultivo
-
-  const handleDelete = async () => {
-    try {
-      await deleteDoc(doc(db, "cultivos", cultivo.id)); // Eliminar cultivo por ID
-      Alert.alert("Éxito", "Cultivo eliminado correctamente");
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error al eliminar cultivo:", error);
-      Alert.alert("Error", "No se pudo eliminar el cultivo.");
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -62,7 +50,10 @@ export default function DetailScreen({ route, navigation }) {
       >
         <Text style={styles.buttonText}>Editar</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleDelete}>
+      <TouchableOpacity
+        style={[styles.button, styles.deleteButton]}
+        onPress={() => handleEliminarCultivo(cultivo.id, navigation)}
+      >
         <Text style={styles.buttonText}>Eliminar</Text>
       </TouchableOpacity>
     </View>

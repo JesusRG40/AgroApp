@@ -1,39 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import RiegoController from "../Controller/EditRiegoController";
 
 export default function EditRiegoScreen({ route, navigation }) {
   const { riegoId } = route.params;
   const [riego, setRiego] = useState(null);
 
-  // Obtener los detalles del riego para editar
-  const fetchRiegoDetail = async () => {
-    try {
-      const riegoDoc = await getDoc(doc(db, "riegos", riegoId));
-      if (riegoDoc.exists()) {
-        setRiego(riegoDoc.data());
-      } else {
-        Alert.alert("Error", "Riego no encontrado.");
+  useEffect(() => {
+    const loadRiego = async () => {
+      try {
+        const riegoData = await RiegoController.fetchRiegoDetail(riegoId);
+        setRiego(riegoData);
+      } catch (error) {
+        Alert.alert("Error", "No se pudo obtener la información del riego.");
         navigation.goBack();
       }
-    } catch (error) {
-      console.error("Error al obtener detalles del riego: ", error);
-      Alert.alert("Error", "No se pudo obtener la información del riego.");
-    }
-  };
-
-  useEffect(() => {
-    fetchRiegoDetail();
+    };
+    loadRiego();
   }, []);
 
   const handleSave = async () => {
     try {
-      await updateDoc(doc(db, "riegos", riegoId), riego);
+      await RiegoController.updateRiego(riego);
       Alert.alert("Éxito", "Riego actualizado correctamente.");
       navigation.navigate("RiegosList");
-    } catch (error) {
-      console.error("Error al actualizar el riego: ", error);
+    } catch {
       Alert.alert("Error", "No se pudo actualizar el riego.");
     }
   };
@@ -53,20 +44,16 @@ export default function EditRiegoScreen({ route, navigation }) {
       <Text style={styles.label}>Cantidad de Agua (litros):</Text>
       <TextInput
         style={styles.input}
-        value={riego.cantAgua !== null ? String(riego.cantAgua) : ""}
-        onChangeText={(text) =>
-            setRiego({ ...riego, cantAgua: text ? parseFloat(text) : null })
-        }
+        value={String(riego.cantAgua)}
+        onChangeText={(text) => setRiego({ ...riego, cantAgua: text ? parseFloat(text) : null })}
         keyboardType="numeric"
       />
 
-       <Text style={styles.label}>Duración del Riego (minutos):</Text>
-       <TextInput
+      <Text style={styles.label}>Duración del Riego (minutos):</Text>
+      <TextInput
         style={styles.input}
-        value={riego.duracionRiego !== null ? String(riego.duracionRiego) : ""}
-        onChangeText={(text) =>
-            setRiego({ ...riego, duracionRiego: text ? parseInt(text) : null })
-        }
+        value={String(riego.duracionRiego)}
+        onChangeText={(text) => setRiego({ ...riego, duracionRiego: text ? parseInt(text, 10) : null })}
         keyboardType="numeric"
       />
 

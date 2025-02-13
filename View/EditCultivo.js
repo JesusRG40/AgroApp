@@ -1,33 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { handleActualizarCultivo } from '../Controller/EditCultivoController';
 
 export default function EditScreen({ route, navigation }) {
   const { cultivo } = route.params; // Recibir datos del cultivo
 
-  const [nombre, setNombre] = useState(cultivo.nombre);
-  const [fechaCultivado, setFechaCultivado] = useState(cultivo.fechaCultivado);
-  const [fechaEstimada, setFechaEstimada] = useState(cultivo.fechaEstimada);
-  const [fechaReal, setFechaReal] = useState(cultivo.fechaReal);
-  const [estado, setEstado] = useState(cultivo.estado);
+  const [datos, setDatos] = useState({
+    id: cultivo.id,
+    nombre: cultivo.nombre,
+    fechaCultivado: cultivo.fechaCultivado,
+    fechaEstimada: cultivo.fechaEstimada,
+    fechaReal: cultivo.fechaReal,
+    estado: cultivo.estado,
+  });
 
-  const handleSave = async () => {
-    try {
-      const docRef = doc(db, "cultivos", cultivo.id);
-      await updateDoc(docRef, {
-        nombre,
-        fechaCultivado,
-        fechaEstimada,
-        fechaReal,
-        estado,
-      });
-      Alert.alert("Éxito", "Cultivo actualizado correctamente");
-      navigation.navigate('CultivosList');
-    } catch (error) {
-      console.error("Error al actualizar cultivo:", error);
-      Alert.alert("Error", "No se pudo actualizar el cultivo.");
-    }
+  const handleChange = (key, value) => {
+    setDatos((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
@@ -36,34 +24,34 @@ export default function EditScreen({ route, navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Nombre del Cultivo"
-        value={nombre}
-        onChangeText={setNombre}
+        value={datos.nombre}
+        onChangeText={(value) => handleChange('nombre', value)}
       />
       <TextInput
         style={styles.input}
         placeholder="Fecha Cultivado (YYYY-MM-DD)"
-        value={fechaCultivado}
-        onChangeText={setFechaCultivado}
+        value={datos.fechaCultivado}
+        onChangeText={(value) => handleChange('fechaCultivado', value)}
       />
       <TextInput
         style={styles.input}
         placeholder="Fecha Estimada (YYYY-MM-DD)"
-        value={fechaEstimada}
-        onChangeText={setFechaEstimada}
+        value={datos.fechaEstimada}
+        onChangeText={(value) => handleChange('fechaEstimada', value)}
       />
       <TextInput
         style={styles.input}
         placeholder="Fecha Real (YYYY-MM-DD)"
-        value={fechaReal}
-        onChangeText={setFechaReal}
+        value={datos.fechaReal}
+        onChangeText={(value) => handleChange('fechaReal', value)}
       />
       <TextInput
         style={styles.input}
         placeholder="Estado del Cultivo"
-        value={estado}
-        onChangeText={setEstado}
+        value={datos.estado}
+        onChangeText={(value) => handleChange('estado', value)}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSave}>
+      <TouchableOpacity style={styles.button} onPress={() => handleActualizarCultivo(datos, navigation)}>
         <Text style={styles.buttonText}>Guardar Cambios</Text>
       </TouchableOpacity>
     </View>

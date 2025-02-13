@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import InsumoController from "../Controller/RegistrarInsumoController";
 
 export default function AddInsumoScreen({ navigation }) {
   const [nombre, setNombre] = useState("");
@@ -9,26 +8,13 @@ export default function AddInsumoScreen({ navigation }) {
   const [cantDisponible, setCantDisponible] = useState("");
   const [unidadMedida, setUnidadMedida] = useState("");
 
-  const handleAddInsumo = async () => {
+  const handleAddInsumo = () => {
     if (!nombre || !tipo || !cantDisponible || !unidadMedida) {
       Alert.alert("Error", "Todos los campos son obligatorios.");
       return;
     }
 
-    try {
-      await addDoc(collection(db, "insumos"), {
-        nombre,
-        tipo,
-        cantDisponible: parseFloat(cantDisponible),
-        unidadMedida,
-      });
-
-      Alert.alert("Éxito", "Insumo registrado correctamente.");
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error al registrar insumo: ", error);
-      Alert.alert("Error", "No se pudo registrar el insumo.");
-    }
+    InsumoController.registrarInsumo({ nombre, tipo, cantDisponible, unidadMedida }, navigation);
   };
 
   return (
@@ -36,37 +22,16 @@ export default function AddInsumoScreen({ navigation }) {
       <Text style={styles.title}>Registrar Nuevo Insumo</Text>
 
       <Text style={styles.label}>Nombre:</Text>
-      <TextInput
-        style={styles.input}
-        value={nombre}
-        onChangeText={setNombre}
-        placeholder="Ingrese el nombre del insumo"
-      />
+      <TextInput style={styles.input} value={nombre} onChangeText={setNombre} placeholder="Ingrese el nombre del insumo" />
 
       <Text style={styles.label}>Tipo:</Text>
-      <TextInput
-        style={styles.input}
-        value={tipo}
-        onChangeText={setTipo}
-        placeholder="Ingrese el tipo del insumo"
-      />
+      <TextInput style={styles.input} value={tipo} onChangeText={setTipo} placeholder="Ingrese el tipo del insumo" />
 
       <Text style={styles.label}>Cantidad Disponible:</Text>
-      <TextInput
-        style={styles.input}
-        value={cantDisponible}
-        onChangeText={setCantDisponible}
-        placeholder="Ingrese la cantidad disponible"
-        keyboardType="numeric"
-      />
+      <TextInput style={styles.input} value={cantDisponible} onChangeText={setCantDisponible} placeholder="Ingrese la cantidad disponible" keyboardType="numeric" />
 
       <Text style={styles.label}>Unidad de Medida:</Text>
-      <TextInput
-        style={styles.input}
-        value={unidadMedida}
-        onChangeText={setUnidadMedida}
-        placeholder="Ingrese la unidad de medida"
-      />
+      <TextInput style={styles.input} value={unidadMedida} onChangeText={setUnidadMedida} placeholder="Ingrese la unidad de medida" />
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddInsumo}>
         <Text style={styles.addButtonText}>Registrar</Text>

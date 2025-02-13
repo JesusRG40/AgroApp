@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -6,71 +6,32 @@ import {
   StyleSheet,
   Image,
   Animated,
-  Alert,
   Dimensions,
 } from "react-native";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { useHomeController } from "../Controller/HomeController";
 
 const { width, height } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }) {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(0));
-
-  const handleToggleMenu = () => {
-    if (menuVisible) {
-      // Ocultar menú
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => setMenuVisible(false));
-    } else {
-      // Mostrar menú
-      setMenuVisible(true);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      Alert.alert("Éxito", "Sesión cerrada correctamente");
-      navigation.replace("Login");
-    } catch (error) {
-      console.error(error);
-      Alert.alert("Error", "No se pudo cerrar la sesión.");
-    }
-  };
+  const { menuVisible, fadeAnim, handleToggleMenu, handleLogout } =
+    useHomeController(navigation);
 
   return (
     <View style={styles.container}>
-      {/* Círculos de fondo */}
       <View style={[styles.circle, styles.circle1]} />
       <View style={[styles.circle, styles.circle2]} />
       <View style={[styles.circle, styles.circle3]} />
 
-      {/* Contenido principal */}
       <View style={styles.content}>
-        <Image
-          source={require("../assets/logo.png")}
-          style={styles.logo}
-        />
+        <Image source={require("../assets/logo.png")} style={styles.logo} />
         <Text style={styles.title}>¡Bienvenido a AgroApp!</Text>
 
-        {/* Botón central */}
         <TouchableOpacity style={styles.centralButton} onPress={handleToggleMenu}>
           <Text style={styles.centralButtonText}>
             {menuVisible ? "Cerrar Menú" : "Abrir Menú"}
           </Text>
         </TouchableOpacity>
 
-        {/* Botones adicionales con animación */}
         {menuVisible && (
           <Animated.View style={{ opacity: fadeAnim }}>
             <TouchableOpacity
