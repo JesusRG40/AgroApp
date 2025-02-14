@@ -1,38 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { fetchRiegoDetail, deleteRiego } from "../Controller/RiegoDetailController";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { fetchRiegoDetail, handleDeleteRiego } from "../Controller/RiegosController";
 
-export default function RiegoDetail({ route, navigation }) {
+export default function RiegoDetailScreen() {
+  const route = useRoute();
+  const navigation = useNavigation();
   const { riegoId } = route.params;
   const [riego, setRiego] = useState(null);
   const [cultivoNombre, setCultivoNombre] = useState("Cargando...");
 
   useEffect(() => {
-    const loadRiego = async () => {
-      try {
-        const data = await fetchRiegoDetail(riegoId);
-        if (data) {
-          setRiego(data.riego);
-          setCultivoNombre(data.cultivoNombre);
-        } else {
-          Alert.alert("Error", "Riego no encontrado.");
-          navigation.goBack();
-        }
-      } catch {
-        Alert.alert("Error", "No se pudo obtener la información del riego.");
-      }
-    };
-    loadRiego();
+    fetchRiegoDetail(riegoId, setRiego, setCultivoNombre, navigation);
   }, []);
-
-  const handleDelete = async () => {
-    if (await deleteRiego(riegoId)) {
-      Alert.alert("Éxito", "Riego eliminado correctamente.");
-      navigation.goBack();
-    } else {
-      Alert.alert("Error", "No se pudo eliminar el riego.");
-    }
-  };
 
   if (!riego) {
     return (
@@ -80,7 +60,7 @@ export default function RiegoDetail({ route, navigation }) {
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#EF5350" }]}
-        onPress={handleDelete}
+        onPress={() => handleDeleteRiego(riegoId, navigation)}
       >
         <Text style={styles.buttonText}>Eliminar</Text>
       </TouchableOpacity>

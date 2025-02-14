@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, FlatList } from "react-native";
-import RiegoController from "../Controller/RegistrarRiegoController";
+import { fetchCultivosController, handleAddRiegoController } from "../Controller/RiegosController";
 
 export default function AddRiegoScreen({ navigation }) {
   const [cultivos, setCultivos] = useState([]);
@@ -11,17 +11,8 @@ export default function AddRiegoScreen({ navigation }) {
   const [metodoRiego, setMetodoRiego] = useState("");
 
   useEffect(() => {
-    RiegoController.obtenerCultivos(setCultivos);
+    fetchCultivosController(setCultivos);
   }, []);
-
-  const handleAddRiego = () => {
-    if (!selectedCultivo || !fechaRiego || !cantAgua || !duracionRiego || !metodoRiego) {
-      Alert.alert("Error", "Todos los campos son obligatorios.");
-      return;
-    }
-
-    RiegoController.registrarRiego({ selectedCultivo, fechaRiego, cantAgua, duracionRiego, metodoRiego }, navigation);
-  };
 
   const renderCultivoItem = ({ item }) => (
     <TouchableOpacity
@@ -43,15 +34,30 @@ export default function AddRiegoScreen({ navigation }) {
       <TextInput style={styles.input} value={fechaRiego} onChangeText={setFechaRiego} placeholder="Ingrese la fecha del riego" />
 
       <Text style={styles.label}>Cantidad de Agua (litros):</Text>
-      <TextInput style={styles.input} value={cantAgua} onChangeText={setCantAgua} placeholder="Ingrese la cantidad de agua" keyboardType="numeric" />
+      <TextInput
+        style={styles.input}
+        value={cantAgua}
+        onChangeText={setCantAgua}
+        placeholder="Ingrese la cantidad de agua"
+        keyboardType="numeric"
+      />
 
       <Text style={styles.label}>Duración del Riego (minutos):</Text>
-      <TextInput style={styles.input} value={duracionRiego} onChangeText={setDuracionRiego} placeholder="Ingrese la duración del riego" keyboardType="numeric" />
+      <TextInput
+        style={styles.input}
+        value={duracionRiego}
+        onChangeText={setDuracionRiego}
+        placeholder="Ingrese la duración del riego"
+        keyboardType="numeric"
+      />
 
       <Text style={styles.label}>Método de Riego:</Text>
       <TextInput style={styles.input} value={metodoRiego} onChangeText={setMetodoRiego} placeholder="Ingrese el método de riego" />
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddRiego}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => handleAddRiegoController(selectedCultivo, fechaRiego, cantAgua, duracionRiego, metodoRiego, navigation)}
+      >
         <Text style={styles.addButtonText}>Registrar</Text>
       </TouchableOpacity>
     </View>

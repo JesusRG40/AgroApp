@@ -1,33 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import RiegoController from "../Controller/EditRiegoController";
+import { fetchRiegoDetailId, handleSaveRiego } from "../Controller/RiegosController";
 
 export default function EditRiegoScreen({ route, navigation }) {
   const { riegoId } = route.params;
   const [riego, setRiego] = useState(null);
 
   useEffect(() => {
-    const loadRiego = async () => {
-      try {
-        const riegoData = await RiegoController.fetchRiegoDetail(riegoId);
-        setRiego(riegoData);
-      } catch (error) {
-        Alert.alert("Error", "No se pudo obtener la información del riego.");
-        navigation.goBack();
-      }
-    };
-    loadRiego();
+    fetchRiegoDetailId(riegoId, setRiego, navigation);
   }, []);
-
-  const handleSave = async () => {
-    try {
-      await RiegoController.updateRiego(riego);
-      Alert.alert("Éxito", "Riego actualizado correctamente.");
-      navigation.navigate("RiegosList");
-    } catch {
-      Alert.alert("Error", "No se pudo actualizar el riego.");
-    }
-  };
 
   if (!riego) {
     return (
@@ -44,7 +25,7 @@ export default function EditRiegoScreen({ route, navigation }) {
       <Text style={styles.label}>Cantidad de Agua (litros):</Text>
       <TextInput
         style={styles.input}
-        value={String(riego.cantAgua)}
+        value={riego.cantAgua !== null ? String(riego.cantAgua) : ""}
         onChangeText={(text) => setRiego({ ...riego, cantAgua: text ? parseFloat(text) : null })}
         keyboardType="numeric"
       />
@@ -52,8 +33,8 @@ export default function EditRiegoScreen({ route, navigation }) {
       <Text style={styles.label}>Duración del Riego (minutos):</Text>
       <TextInput
         style={styles.input}
-        value={String(riego.duracionRiego)}
-        onChangeText={(text) => setRiego({ ...riego, duracionRiego: text ? parseInt(text, 10) : null })}
+        value={riego.duracionRiego !== null ? String(riego.duracionRiego) : ""}
+        onChangeText={(text) => setRiego({ ...riego, duracionRiego: text ? parseInt(text) : null })}
         keyboardType="numeric"
       />
 
@@ -64,7 +45,7 @@ export default function EditRiegoScreen({ route, navigation }) {
         onChangeText={(text) => setRiego({ ...riego, metodoRiego: text })}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSave}>
+      <TouchableOpacity style={styles.button} onPress={() => handleSaveRiego(riegoId, riego, navigation)}>
         <Text style={styles.buttonText}>Guardar Cambios</Text>
       </TouchableOpacity>
     </View>

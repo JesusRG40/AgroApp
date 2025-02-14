@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import SearchBar from "../components/SearchBar";
-import RiegoController from "../Controller/RiegosController";
+import { fetchRiegos, handleSearch } from "../Controller/RiegosController";
 
 export default function RiegosListScreen({ navigation }) {
   const [riegos, setRiegos] = useState([]);
@@ -11,7 +11,7 @@ export default function RiegosListScreen({ navigation }) {
 
   useFocusEffect(
     React.useCallback(() => {
-      RiegoController.obtenerRiegos(setRiegos, setFilteredRiegos);
+      fetchRiegos(setRiegos, setFilteredRiegos);
     }, [])
   );
 
@@ -19,22 +19,19 @@ export default function RiegosListScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>Riegos</Text>
 
-      {/* Barra de búsqueda */}
       <SearchBar
         placeholder="Buscar por cultivo"
         value={searchTerm}
-        onChangeText={(text) => {
-          setSearchTerm(text);
-          RiegoController.filtrarRiegos(text, riegos, setFilteredRiegos);
-        }}
+        onChangeText={(text) => handleSearch(text, riegos, setSearchTerm, setFilteredRiegos)}
       />
 
-      {/* Lista de riegos */}
       <FlatList
         data={filteredRiegos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate("RiegoDetail", { riegoId: item.id })}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("RiegoDetail", { riegoId: item.id })}
+          >
             <View style={styles.riegoCard}>
               <Text style={styles.riegoText}>
                 Fecha: {item.fechaRiego?.toDate().toLocaleDateString() || "No disponible"}
@@ -50,7 +47,6 @@ export default function RiegosListScreen({ navigation }) {
         }
       />
 
-      {/* Botón para agregar un nuevo riego */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => navigation.navigate("RegistrarRiego")}

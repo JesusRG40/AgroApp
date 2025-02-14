@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { fetchInsumoDetail, handleDeleteInsumo } from "../Controller/InsumosDetailController";
+import { fetchInsumoDetail, handleDeleteInsumo } from "../Controller/InsumosController";
 
 export default function InsumoDetail({ route, navigation }) {
   const { insumoId } = route.params;
