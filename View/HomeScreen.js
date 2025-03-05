@@ -49,6 +49,20 @@ export default function HomeScreen({ navigation }) {
             </TouchableOpacity>
 
             <TouchableOpacity
+              style={[styles.button, styles.historialSueloButton]}
+              onPress={() => navigation.navigate("HistorialList")}
+            >
+              <Text style={styles.buttonText}>Historial Suelo</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.button, styles.costosButton]}
+              onPress={() => navigation.navigate("CostosList")}
+            >
+              <Text style={styles.buttonText}>Costos</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               style={[styles.button, styles.insumosButton]}
               onPress={() => navigation.navigate("InsumosList")}
             >
@@ -142,6 +156,12 @@ const styles = StyleSheet.create({
   },
   riegosButton: {
     backgroundColor: "#2196F3",
+  },
+  historialSueloButton: {
+    backgroundColor: "#9C27B0",
+  },
+  costosButton: {
+    backgroundColor: "#E91E63",
   },
   insumosButton: {
     backgroundColor: "#FF9800",
