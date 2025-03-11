@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { handleActualizarCultivo } from '../Controller/CultivoController';
 
 export default function EditScreen({ route, navigation }) {
@@ -16,6 +16,43 @@ export default function EditScreen({ route, navigation }) {
 
   const handleChange = (key, value) => {
     setDatos((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const validarDatos = () => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (datos.nombre.trim() === '') {
+      Alert.alert('Error', 'El nombre del cultivo es obligatorio.');
+      return false;
+    }
+
+    if (!dateRegex.test(datos.fechaCultivado)) {
+      Alert.alert('Error', 'La fecha de cultivo debe tener el formato YYYY-MM-DD.');
+      return false;
+    }
+
+    if (!dateRegex.test(datos.fechaEstimada)) {
+      Alert.alert('Error', 'La fecha estimada de cosecha debe tener el formato YYYY-MM-DD.');
+      return false;
+    }
+
+    if (datos.fechaReal && !dateRegex.test(datos.fechaReal)) {
+      Alert.alert('Error', 'La fecha real de cosecha debe tener el formato YYYY-MM-DD.');
+      return false;
+    }
+
+    if (datos.estado.trim() === '') {
+      Alert.alert('Error', 'El estado del cultivo es obligatorio.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (validarDatos()) {
+      handleActualizarCultivo(datos, navigation);
+    }
   };
 
   return (
@@ -51,7 +88,7 @@ export default function EditScreen({ route, navigation }) {
         value={datos.estado}
         onChangeText={(value) => handleChange('estado', value)}
       />
-      <TouchableOpacity style={styles.button} onPress={() => handleActualizarCultivo(datos, navigation)}>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Guardar Cambios</Text>
       </TouchableOpacity>
     </View>

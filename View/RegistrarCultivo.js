@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { handleRegistrarCultivo } from '../Controller/CultivoController';
 
 export default function RegistrarCultivo({ navigation, route }) {
@@ -13,6 +13,43 @@ export default function RegistrarCultivo({ navigation, route }) {
 
   const handleChange = (key, value) => {
     setCultivo((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const validarDatos = () => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (cultivo.nombre.trim() === '') {
+      Alert.alert('Error', 'El nombre del cultivo es obligatorio.');
+      return false;
+    }
+
+    if (!dateRegex.test(cultivo.fechaCultivado)) {
+      Alert.alert('Error', 'La fecha de cultivo debe tener el formato YYYY-MM-DD.');
+      return false;
+    }
+
+    if (!dateRegex.test(cultivo.fechaEstimada)) {
+      Alert.alert('Error', 'La fecha estimada de cosecha debe tener el formato YYYY-MM-DD.');
+      return false;
+    }
+
+    if (cultivo.fechaReal && !dateRegex.test(cultivo.fechaReal)) {
+      Alert.alert('Error', 'La fecha real de cosecha debe tener el formato YYYY-MM-DD.');
+      return false;
+    }
+
+    if (cultivo.estado.trim() === '') {
+      Alert.alert('Error', 'El estado del cultivo es obligatorio.');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (validarDatos()) {
+      handleRegistrarCultivo(cultivo, navigation, route.params?.refresh);
+    }
   };
 
   return (
@@ -47,10 +84,7 @@ export default function RegistrarCultivo({ navigation, route }) {
         value={cultivo.estado}
         onChangeText={(value) => handleChange('estado', value)}
       />
-      <Button
-        title="Registrar"
-        onPress={() => handleRegistrarCultivo(cultivo, navigation, route.params?.refresh)}
-      />
+      <Button title="Registrar" onPress={handleSubmit} />
     </View>
   );
 }

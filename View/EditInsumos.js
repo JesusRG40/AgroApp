@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { fetchInsumoDetail, handleSaveInsumo } from "../Controller/InsumosController";
 
 export default function EditInsumoScreen({ route, navigation }) {
@@ -14,6 +14,21 @@ export default function EditInsumoScreen({ route, navigation }) {
   useEffect(() => {
     fetchInsumoDetail(insumoId, setInsumoData, navigation);
   }, []);
+
+  const validateAndSave = () => {
+    if (!insumoData.nombre.trim() || !insumoData.tipo.trim() || !insumoData.unidadMedida.trim()) {
+      Alert.alert("Error", "Todos los campos deben estar completos.");
+      return;
+    }
+
+    const cantidad = parseFloat(insumoData.cantDisponible);
+    if (isNaN(cantidad) || cantidad <= 0) {
+      Alert.alert("Error", "La cantidad disponible debe ser un número mayor a 0.");
+      return;
+    }
+
+    handleSaveInsumo(insumoId, insumoData, navigation);
+  };
 
   return (
     <View style={styles.container}>
@@ -38,7 +53,7 @@ export default function EditInsumoScreen({ route, navigation }) {
       <Text style={styles.label}>Cantidad Disponible:</Text>
       <TextInput
         style={styles.input}
-        value={insumoData.cantDisponible}
+        value={insumoData.cantDisponible !== null ? String(insumoData.cantDisponible) : ""}
         onChangeText={(text) => setInsumoData({ ...insumoData, cantDisponible: text })}
         placeholder="Ingrese la cantidad disponible"
         keyboardType="numeric"
@@ -52,7 +67,7 @@ export default function EditInsumoScreen({ route, navigation }) {
         placeholder="Ingrese la unidad de medida"
       />
 
-      <TouchableOpacity style={styles.saveButton} onPress={() => handleSaveInsumo(insumoId, insumoData, navigation)}>
+      <TouchableOpacity style={styles.saveButton} onPress={validateAndSave}>
         <Text style={styles.saveButtonText}>Guardar Cambios</Text>
       </TouchableOpacity>
     </View>

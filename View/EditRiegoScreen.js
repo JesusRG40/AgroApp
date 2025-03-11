@@ -10,6 +10,28 @@ export default function EditRiegoScreen({ route, navigation }) {
     fetchRiegoDetailId(riegoId, setRiego, navigation);
   }, []);
 
+  const validarDatos = () => {
+    if (!riego.cantAgua || riego.cantAgua <= 0 || isNaN(riego.cantAgua)) {
+      Alert.alert("Error", "La cantidad de agua debe ser un número positivo.");
+      return false;
+    }
+    if (!riego.duracionRiego || riego.duracionRiego <= 0 || isNaN(riego.duracionRiego)) {
+      Alert.alert("Error", "La duración del riego debe ser un número positivo.");
+      return false;
+    }
+    if (!riego.metodoRiego.trim()) {
+      Alert.alert("Error", "El método de riego no puede estar vacío.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleGuardar = () => {
+    if (validarDatos()) {
+      handleSaveRiego(riegoId, riego, navigation);
+    }
+  };
+
   if (!riego) {
     return (
       <View style={styles.container}>
@@ -45,7 +67,7 @@ export default function EditRiegoScreen({ route, navigation }) {
         onChangeText={(text) => setRiego({ ...riego, metodoRiego: text })}
       />
 
-      <TouchableOpacity style={styles.button} onPress={() => handleSaveRiego(riegoId, riego, navigation)}>
+      <TouchableOpacity style={styles.button} onPress={handleGuardar}>
         <Text style={styles.buttonText}>Guardar Cambios</Text>
       </TouchableOpacity>
     </View>

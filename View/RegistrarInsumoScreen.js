@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { handleAddInsumo } from "../Controller/InsumosController";
 
 export default function AddInsumoScreen({ navigation }) {
@@ -7,6 +7,24 @@ export default function AddInsumoScreen({ navigation }) {
   const [tipo, setTipo] = useState("");
   const [cantDisponible, setCantDisponible] = useState("");
   const [unidadMedida, setUnidadMedida] = useState("");
+
+  const validarDatos = () => {
+    if (!nombre.trim() || !tipo.trim() || !cantDisponible.trim() || !unidadMedida.trim()) {
+      Alert.alert("Error", "Todos los campos son obligatorios.");
+      return false;
+    }
+    if (isNaN(cantDisponible) || parseFloat(cantDisponible) <= 0) {
+      Alert.alert("Error", "La cantidad disponible debe ser un número válido y mayor a 0.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleRegistrar = () => {
+    if (validarDatos()) {
+      handleAddInsumo(nombre, tipo, cantDisponible, unidadMedida, navigation);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -45,10 +63,7 @@ export default function AddInsumoScreen({ navigation }) {
         placeholder="Ingrese la unidad de medida"
       />
 
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => handleAddInsumo(nombre, tipo, cantDisponible, unidadMedida, navigation)}
-      >
+      <TouchableOpacity style={styles.addButton} onPress={handleRegistrar}>
         <Text style={styles.addButtonText}>Registrar</Text>
       </TouchableOpacity>
     </View>
