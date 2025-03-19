@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { handleAddInsumo } from "../Controller/InsumosController";
+import { handleAddInsumo } from "../../Presenter/InsumosPresenter";
 
 export default function AddInsumoScreen({ navigation }) {
   const [nombre, setNombre] = useState("");

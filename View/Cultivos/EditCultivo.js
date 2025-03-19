@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { handleActualizarCultivo } from '../Controller/CultivoController';
+import { handleActualizarCultivo } from '../../Presenter/CultivoPresenter';
 
 export default function EditScreen({ route, navigation }) {
   const { cultivo } = route.params; // Recibir datos del cultivo

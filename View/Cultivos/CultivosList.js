@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { fetchCultivos } from '../Controller/CultivoController';
+import { fetchCultivos } from '../../Presenter/CultivoPresenter';
 
 const { width, height } = Dimensions.get('window');
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import SearchBar from "../components/SearchBar";
-import { fetchInsumos, filtrarInsumos } from "../Controller/InsumosController";
+import SearchBar from "../../components/SearchBar";
+import { fetchInsumos, filtrarInsumos } from "../../Presenter/InsumosPresenter";
 
 export default function InsumosListScreen({ navigation }) {
   const [insumos, setInsumos] = useState([]);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { fetchRiegoDetailId, handleSaveRiego } from "../Controller/RiegosController";
+import { fetchRiegoDetailId, handleSaveRiego } from "../../Presenter/RiegosPresenter";
 
 export default function EditRiegoScreen({ route, navigation }) {
   const { riegoId } = route.params;

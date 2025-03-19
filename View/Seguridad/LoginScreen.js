@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from "react-native";
-import { handleLogin, handleSignUp } from "../Controller/AuthController";
+import { handleLogin, handleSignUp } from "../../Presenter/AuthPresenter";
 
 const { width, height } = Dimensions.get("window");
 
@@ -10,7 +10,7 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <View style={styles.container}>
+      <View style={styles.container}>
       <View style={[styles.circle, styles.circle1]} />
       <View style={[styles.circle, styles.circle2]} />
       <View style={[styles.circle, styles.circle3]} />
@@ -18,7 +18,7 @@ export default function LoginScreen({ navigation }) {
 
       <View style={styles.content}>
         <Text style={styles.logoText}>AgroApp</Text>
-        <Image source={require("../assets/logo.png")} style={styles.logo} />
+        <Image source={require("../../assets/logo.png")} style={styles.logo} />
         <Text style={styles.title}>Iniciar sesión</Text>
         <TextInput style={styles.input} placeholder="Correo Electrónico" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} />
         <TextInput style={styles.input} placeholder="Contraseña" secureTextEntry autoCapitalize="none" value={password} onChangeText={setPassword} />

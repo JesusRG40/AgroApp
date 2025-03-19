@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { handleEliminarCultivo } from '../Controller/CultivoController';
+import { handleEliminarCultivo } from '../../Presenter/CultivoPresenter';
 
 const { width } = Dimensions.get('window');
 

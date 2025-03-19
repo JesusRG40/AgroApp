@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, FlatList } from "react-native";
-import { fetchCultivosController, handleAddRiegoController } from "../Controller/RiegosController";
+import { fetchCultivosController, handleAddRiegoController } from "../../Presenter/RiegosPresenter";
 
 export default function AddRiegoScreen({ navigation }) {
   const [cultivos, setCultivos] = useState([]);

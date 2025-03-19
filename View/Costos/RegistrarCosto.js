@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { fetchCultivosController, handleAddCostoController } from "../Controller/CostosController";
+import { fetchCultivosController, handleAddCostoController } from "../../Presenter/CostosPresenter";
 
 export default function RegistrarCostoScreen({ navigation }) {
   const [cultivos, setCultivos] = useState([]);

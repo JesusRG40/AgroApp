@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, Platform } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { fetchHistorialSueloDetailId, handleSaveHistorialSuelo } from "../Controller/Historial_SueloController";
+import { fetchHistorialSueloDetailId, handleSaveHistorialSuelo } from "../../Presenter/Historial_SueloPresenter";
 
 export default function EditHistorialSueloScreen() {
   const route = useRoute();

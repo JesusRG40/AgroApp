@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { fetchRiegoDetail, handleDeleteRiego } from "../Controller/RiegosController";
+import { fetchRiegoDetail, handleDeleteRiego } from "../../Presenter/RiegosPresenter";
 
 export default function RiegoDetailScreen() {
   const route = useRoute();

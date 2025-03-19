@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { handleRegistrarCultivo } from '../Controller/CultivoController';
+import { handleRegistrarCultivo } from '../../Presenter/CultivoPresenter';
 
 export default function RegistrarCultivo({ navigation, route }) {
   const [cultivo, setCultivo] = useState({

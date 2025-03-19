@@ -1,57 +1,63 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import SearchBar from "../components/SearchBar";
-import { fetchRiegos, handleSearch } from "../Controller/RiegosController";
+import SearchBar from "../../components/SearchBar";
+import { fetchHistorialSuelo, handleSearch } from "../../Presenter/Historial_SueloPresenter";
 
-export default function RiegosListScreen({ navigation }) {
-  const [riegos, setRiegos] = useState([]);
+export default function HistorialSueloListScreen({ navigation }) {
+  const [historial, setHistorial] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredRiegos, setFilteredRiegos] = useState([]);
+  const [filteredHistorial, setFilteredHistorial] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchRiegos(setRiegos, setFilteredRiegos);
+      fetchHistorialSuelo(setHistorial, setFilteredHistorial);
     }, [])
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Riegos</Text>
+      <Text style={styles.title}>Historial de Suelo</Text>
 
       <SearchBar
         placeholder="Buscar por cultivo"
         value={searchTerm}
-        onChangeText={(text) => handleSearch(text, riegos, setSearchTerm, setFilteredRiegos)}
+        onChangeText={(text) =>
+          handleSearch(text, historial, setSearchTerm, setFilteredHistorial)
+        }
       />
 
       <FlatList
-        data={filteredRiegos}
+        data={filteredHistorial}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate("RiegoDetail", { riegoId: item.id })}
+            onPress={() =>
+              navigation.navigate("HistorialDetail", { historialId: item.id })
+            }
           >
-            <View style={styles.riegoCard}>
-              <Text style={styles.riegoText}>
-                Fecha: {item.fechaRiego?.toDate().toLocaleDateString() || "No disponible"}
+            <View style={styles.historialCard}>
+              <Text style={styles.historialText}>
+                Fecha: {item.fechaMedicion?.toDate().toLocaleDateString() || "No disponible"}
               </Text>
-              <Text style={styles.riegoText}>Cultivo: {item.cultivoNombre || "No disponible"}</Text>
+              <Text style={styles.historialText}>
+                Cultivo: {item.cultivoNombre || "No disponible"}
+              </Text>
             </View>
           </TouchableOpacity>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyText}>
-            {searchTerm ? "No se encontraron resultados." : "No hay riegos registrados."}
+            {searchTerm ? "No se encontraron resultados." : "No hay registros de historial de suelo."}
           </Text>
         }
       />
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("RegistrarRiego")}
+        onPress={() => navigation.navigate("RegistrarHistorial")}
       >
-        <Text style={styles.addButtonText}>Registrar Riego</Text>
+        <Text style={styles.addButtonText}>Registrar Historial de Suelo</Text>
       </TouchableOpacity>
     </View>
   );
@@ -70,14 +76,14 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
-  riegoCard: {
+  historialCard: {
     backgroundColor: "#FFFFFF",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     elevation: 2,
   },
-  riegoText: {
+  historialText: {
     fontSize: 16,
     color: "#555",
   },

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { fetchCostoDetail, handleSaveCosto } from "../Controller/CostosController";
+import { fetchCostoDetail, handleSaveCosto } from "../../Presenter/CostosPresenter";
 
 export default function EditCostoScreen() {
   const route = useRoute();

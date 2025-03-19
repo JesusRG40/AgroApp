@@ -8,7 +8,7 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
-import { useHomeController } from "../Controller/HomeController";
+import { useHomeController } from "../../Presenter/HomePresenter";
 
 const { width, height } = Dimensions.get("window");
 
@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
       <View style={[styles.circle, styles.circle3]} />
 
       <View style={styles.content}>
-        <Image source={require("../assets/logo.png")} style={styles.logo} />
+        <Image source={require("../../assets/logo.png")} style={styles.logo} />
         <Text style={styles.title}>¡Bienvenido a AgroApp!</Text>
 
         <TouchableOpacity style={styles.centralButton} onPress={handleToggleMenu}>

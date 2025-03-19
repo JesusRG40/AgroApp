@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert, Platform,} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { fetchCultivosController, handleAddHistorialSueloController } from "../Controller/Historial_SueloController";
+import { fetchCultivosController, handleAddHistorialSueloController } from "../../Presenter/Historial_SueloPresenter";
 
 export default function AddHistorialSueloScreen({ navigation }) {
   const [cultivos, setCultivos] = useState([]);

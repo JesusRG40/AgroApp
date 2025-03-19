@@ -1,69 +1,57 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import SearchBar from "../components/SearchBar";
-import { fetchCostos, handleSearch } from "../Controller/CostosController";
+import SearchBar from "../../components/SearchBar";
+import { fetchRiegos, handleSearch } from "../../Presenter/RiegosPresenter";
 
-export default function CostosListScreen({ navigation }) {
-  const [costos, setCostos] = useState([]);
+export default function RiegosListScreen({ navigation }) {
+  const [riegos, setRiegos] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCostos, setFilteredCostos] = useState([]);
+  const [filteredRiegos, setFilteredRiegos] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchCostos(setCostos, setFilteredCostos);
+      fetchRiegos(setRiegos, setFilteredRiegos);
     }, [])
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Listado de Costos</Text>
+      <Text style={styles.title}>Riegos</Text>
 
       <SearchBar
         placeholder="Buscar por cultivo"
         value={searchTerm}
-        onChangeText={(text) =>
-          handleSearch(text, costos, setSearchTerm, setFilteredCostos)
-        }
+        onChangeText={(text) => handleSearch(text, riegos, setSearchTerm, setFilteredRiegos)}
       />
 
       <FlatList
-        data={filteredCostos}
+        data={filteredRiegos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("CostoDetail", { costoId: item.id })
-            }
+            onPress={() => navigation.navigate("RiegoDetail", { riegoId: item.id })}
           >
-            <View style={styles.costoCard}>
-              <Text style={styles.costoText}>
-                Fecha: {item.fechaCosto?.toDate().toLocaleDateString() || "No disponible"}
+            <View style={styles.riegoCard}>
+              <Text style={styles.riegoText}>
+                Fecha: {item.fechaRiego?.toDate().toLocaleDateString() || "No disponible"}
               </Text>
-              <Text style={styles.costoText}>
-                Cultivo: {item.cultivoNombre || "No disponible"}
-              </Text>
-              <Text style={styles.costoText}>
-                Tipo: {item.tipoCosto || "No disponible"}
-              </Text>
-              <Text style={styles.costoText}>
-                Monto: {item.monto !== undefined ? `$${item.monto}` : "No disponible"}
-              </Text>
+              <Text style={styles.riegoText}>Cultivo: {item.cultivoNombre || "No disponible"}</Text>
             </View>
           </TouchableOpacity>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyText}>
-            {searchTerm ? "No se encontraron resultados." : "No hay registros de costos."}
+            {searchTerm ? "No se encontraron resultados." : "No hay riegos registrados."}
           </Text>
         }
       />
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("RegistrarCosto")}
+        onPress={() => navigation.navigate("RegistrarRiego")}
       >
-        <Text style={styles.addButtonText}>Registrar Costo</Text>
+        <Text style={styles.addButtonText}>Registrar Riego</Text>
       </TouchableOpacity>
     </View>
   );
@@ -82,14 +70,14 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
-  costoCard: {
+  riegoCard: {
     backgroundColor: "#FFFFFF",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     elevation: 2,
   },
-  costoText: {
+  riegoText: {
     fontSize: 16,
     color: "#555",
   },

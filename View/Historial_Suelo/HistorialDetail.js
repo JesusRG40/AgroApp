@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { fetchCostoDetail, handleDeleteCosto } from "../Controller/CostosController";
+import { fetchHistorialSueloDetail, handleDeleteHistorialSuelo } from "../../Presenter/Historial_SueloPresenter";
 
-export default function CostosDetailScreen() {
+export default function HistorialSueloDetailScreen() {
   const route = useRoute();
   const navigation = useNavigation();
-  const { costoId } = route.params;
-  const [costo, setCosto] = useState(null);
+  const { historialId } = route.params;
+  const [historial, setHistorial] = useState(null);
   const [cultivoNombre, setCultivoNombre] = useState("Cargando...");
 
   useEffect(() => {
-    fetchCostoDetail(costoId, setCosto, setCultivoNombre, navigation);
+    fetchHistorialSueloDetail(historialId, setHistorial, setCultivoNombre, navigation);
   }, []);
 
-  if (!costo) {
+  if (!historial) {
     return (
       <View style={styles.container}>
-        <Text style={styles.loadingText}>Cargando información del costo...</Text>
+        <Text style={styles.loadingText}>Cargando información del historial de suelo...</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detalles del Costo</Text>
+      <Text style={styles.title}>Detalles del Historial de Suelo</Text>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Fecha del Costo:</Text>
+        <Text style={styles.label}>Fecha de Medición:</Text>
         <Text style={styles.value}>
-          {new Date(costo.fechaCosto.seconds * 1000).toLocaleDateString()}
+          {new Date(historial.fechaMedicion.seconds * 1000).toLocaleDateString()}
         </Text>
       </View>
 
@@ -39,34 +39,30 @@ export default function CostosDetailScreen() {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Tipo de Costo:</Text>
-        <Text style={styles.value}>{costo.tipoCosto}</Text>
+        <Text style={styles.label}>Nutrientes:</Text>
+        <Text style={styles.value}>{historial.nutrientes}</Text>
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Descripción:</Text>
-        <Text style={[styles.value, styles.description]}>
-          {costo.descripcionCosto}
-        </Text>
+        <Text style={styles.label}>Observaciones:</Text>
+        <Text style={styles.value}>{historial.observaciones}</Text>
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.label}>Monto:</Text>
-        <Text style={styles.value}>
-          {costo.monto !== undefined ? `$${costo.monto}` : "No disponible"}
-        </Text>
+        <Text style={styles.label}>pH:</Text>
+        <Text style={styles.value}>{historial.pH}</Text>
       </View>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#FFA726" }]}
-        onPress={() => navigation.navigate("EditCosto", { costoId })}
+        onPress={() => navigation.navigate("EditHistorial", { historialId })}
       >
         <Text style={styles.buttonText}>Editar</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#EF5350" }]}
-        onPress={() => handleDeleteCosto(costoId, navigation)}
+        onPress={() => handleDeleteHistorialSuelo(historialId, navigation)}
       >
         <Text style={styles.buttonText}>Eliminar</Text>
       </TouchableOpacity>
@@ -89,21 +85,18 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#555555",
-    marginBottom: 4,
   },
   value: {
     fontSize: 16,
     color: "#777777",
-  },
-  description: {
-    // Permite que el texto se ajuste a la pantalla
-    flexWrap: "wrap",
   },
   button: {
     width: "90%",

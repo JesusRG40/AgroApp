@@ -1,63 +1,69 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import SearchBar from "../components/SearchBar";
-import { fetchHistorialSuelo, handleSearch } from "../Controller/Historial_SueloController";
+import SearchBar from "../../components/SearchBar";
+import { fetchCostos, handleSearch } from "../../Presenter/CostosPresenter";
 
-export default function HistorialSueloListScreen({ navigation }) {
-  const [historial, setHistorial] = useState([]);
+export default function CostosListScreen({ navigation }) {
+  const [costos, setCostos] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredHistorial, setFilteredHistorial] = useState([]);
+  const [filteredCostos, setFilteredCostos] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchHistorialSuelo(setHistorial, setFilteredHistorial);
+      fetchCostos(setCostos, setFilteredCostos);
     }, [])
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Historial de Suelo</Text>
+      <Text style={styles.title}>Listado de Costos</Text>
 
       <SearchBar
         placeholder="Buscar por cultivo"
         value={searchTerm}
         onChangeText={(text) =>
-          handleSearch(text, historial, setSearchTerm, setFilteredHistorial)
+          handleSearch(text, costos, setSearchTerm, setFilteredCostos)
         }
       />
 
       <FlatList
-        data={filteredHistorial}
+        data={filteredCostos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("HistorialDetail", { historialId: item.id })
+              navigation.navigate("CostoDetail", { costoId: item.id })
             }
           >
-            <View style={styles.historialCard}>
-              <Text style={styles.historialText}>
-                Fecha: {item.fechaMedicion?.toDate().toLocaleDateString() || "No disponible"}
+            <View style={styles.costoCard}>
+              <Text style={styles.costoText}>
+                Fecha: {item.fechaCosto?.toDate().toLocaleDateString() || "No disponible"}
               </Text>
-              <Text style={styles.historialText}>
+              <Text style={styles.costoText}>
                 Cultivo: {item.cultivoNombre || "No disponible"}
+              </Text>
+              <Text style={styles.costoText}>
+                Tipo: {item.tipoCosto || "No disponible"}
+              </Text>
+              <Text style={styles.costoText}>
+                Monto: {item.monto !== undefined ? `$${item.monto}` : "No disponible"}
               </Text>
             </View>
           </TouchableOpacity>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyText}>
-            {searchTerm ? "No se encontraron resultados." : "No hay registros de historial de suelo."}
+            {searchTerm ? "No se encontraron resultados." : "No hay registros de costos."}
           </Text>
         }
       />
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("RegistrarHistorial")}
+        onPress={() => navigation.navigate("RegistrarCosto")}
       >
-        <Text style={styles.addButtonText}>Registrar Historial de Suelo</Text>
+        <Text style={styles.addButtonText}>Registrar Costo</Text>
       </TouchableOpacity>
     </View>
   );
@@ -76,14 +82,14 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
-  historialCard: {
+  costoCard: {
     backgroundColor: "#FFFFFF",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     elevation: 2,
   },
-  historialText: {
+  costoText: {
     fontSize: 16,
     color: "#555",
   },
