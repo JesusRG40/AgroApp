@@ -1,19 +1,40 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { handleEliminarCultivo } from '../../Presenter/CultivoPresenter';
+import { obtenerSeguimientos } from '../../Model/Seguimiento_CultivoModel';
 
 const { width } = Dimensions.get('window');
 
-export default function DetailScreen({ route, navigation }) {
-  const { cultivo } = route.params; // Recibir datos del cultivo
+export default function CultivoDetailScreen({ route, navigation }) {
+  const { cultivo } = route.params;
+
+  const onPressSeguimiento = async () => {
+    try {
+      const seguimientos = await obtenerSeguimientos();
+      const seguimiento = seguimientos.find(s => s.idCultivo.id === cultivo.id || s.idCultivo === cultivo.id);
+      if (seguimiento) {
+        navigation.navigate('Seguimiento_CultivoDetail', { seguimiento });
+      } else {
+        Alert.alert(
+          'Sin seguimiento',
+          'No se encontró un seguimiento para este cultivo. ¿Deseas registrar uno?',
+          [
+            { text: 'Cancelar', style: 'cancel' },
+            { text: 'Sí', onPress: () => navigation.navigate('RegistrarSeguimiento_Cultivo', { idCultivo: cultivo.id, refresh: route.params?.refresh }) }
+          ]
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'No se pudo obtener la información de seguimiento.');
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {/* Círculos decorativos */}
       <View style={[styles.circle, styles.circle1]} />
       <View style={[styles.circle, styles.circle2]} />
 
-      {/* Imagen del cultivo */}
       {cultivo.image ? (
         <Image source={{ uri: cultivo.image }} style={styles.image} />
       ) : (
@@ -22,10 +43,8 @@ export default function DetailScreen({ route, navigation }) {
         </View>
       )}
 
-      {/* Título del cultivo */}
       <Text style={styles.title}>{cultivo.nombre}</Text>
 
-      {/* Información del cultivo */}
       <View style={styles.infoContainer}>
         <Text style={styles.label}>Fecha Cultivado:</Text>
         <Text style={styles.value}>{cultivo.fechaCultivado || 'N/A'}</Text>
@@ -43,7 +62,13 @@ export default function DetailScreen({ route, navigation }) {
         <Text style={styles.value}>{cultivo.estado || 'Desconocido'}</Text>
       </View>
 
-      {/* Botones de acción */}
+      <TouchableOpacity
+        style={[styles.button, styles.followButton]}
+        onPress={onPressSeguimiento}
+      >
+        <Text style={styles.buttonText}>Seguimiento de Cultivo</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.button, styles.editButton]}
         onPress={() => navigation.navigate('EditCultivo', { cultivo })}
@@ -138,6 +163,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     marginVertical: 10,
+  },
+  followButton: {
+    backgroundColor: '#4D96FF',
   },
   editButton: {
     backgroundColor: '#FFA726',

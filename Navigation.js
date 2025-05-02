@@ -22,6 +22,9 @@ import CostosList from './View/Costos/CostosList';
 import CostoDetail from './View/Costos/CostoDetail';
 import RegistrarCosto from './View/Costos/RegistrarCosto';
 import EditCosto from './View/Costos/EditCosto';
+import Seguimiento_CultivoDetail from './View/Cultivos/Seguimiento_CultivoDetail';
+import EditSeguimiento_Cultivo from './View/Cultivos/EditSeguimiento_Cultivo';
+import RegistrarSeguimiento_Cultivo from './View/Cultivos/RegistrarSeguimiento_Cultivo';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +53,9 @@ export default function StackNavigation() {
       <Stack.Screen name="CostoDetail" component={CostoDetail} options={{ title: 'Detalles del costo' }} />
       <Stack.Screen name="RegistrarCosto" component={RegistrarCosto} options={{ title: 'Registrar Costo' }} />
       <Stack.Screen name="EditCosto" component={EditCosto} options={{ title: 'Editar Costo' }} />
+      <Stack.Screen name="Seguimiento_CultivoDetail" component={Seguimiento_CultivoDetail} options={{ title: 'Detalles del seguimiento de cultivo' }} />
+      <Stack.Screen name="EditSeguimiento_Cultivo" component={EditSeguimiento_Cultivo} options={{ title: 'Editar Seguimiento de cultivo' }} />
+      <Stack.Screen name="RegistrarSeguimiento_Cultivo" component={RegistrarSeguimiento_Cultivo} options={{ title: 'Registrar seguimiento de cultivo' }} />
     </Stack.Navigator>
   );
 }
