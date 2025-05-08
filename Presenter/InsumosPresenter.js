@@ -5,7 +5,11 @@ export const fetchInsumos = async (setInsumos, setFilteredInsumos) => {
   try {
     const insumosData = await obtenerInsumos();
     setInsumos(insumosData);
-    setFilteredInsumos(insumosData);
+
+    // Verificar que setFilteredInsumos sea una función antes de llamarla
+    if (typeof setFilteredInsumos === 'function') {
+      setFilteredInsumos(insumosData);
+    }
   } catch (error) {
     console.error(error);
     Alert.alert("Error", "No se pudo cargar la lista de insumos.");

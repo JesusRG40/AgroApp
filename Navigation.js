@@ -25,6 +25,10 @@ import EditCosto from './View/Costos/EditCosto';
 import Seguimiento_CultivoDetail from './View/Cultivos/Seguimiento_CultivoDetail';
 import EditSeguimiento_Cultivo from './View/Cultivos/EditSeguimiento_Cultivo';
 import RegistrarSeguimiento_Cultivo from './View/Cultivos/RegistrarSeguimiento_Cultivo';
+import Aplicaciones_InsumoList from './View/Insumos/Aplicaciones_InsumoList';
+import Aplicaciones_InsumoDetail from './View/Insumos/Aplicacion_InsumoDetail';
+import RegistrarAplicacion from './View/Insumos/RegistrarAplicacion_Insumo';
+import EditAplicacion from './View/Insumos/EditAplicacion_Insumo';
 
 const Stack = createStackNavigator();
 
@@ -56,6 +60,10 @@ export default function StackNavigation() {
       <Stack.Screen name="Seguimiento_CultivoDetail" component={Seguimiento_CultivoDetail} options={{ title: 'Detalles del seguimiento de cultivo' }} />
       <Stack.Screen name="EditSeguimiento_Cultivo" component={EditSeguimiento_Cultivo} options={{ title: 'Editar Seguimiento de cultivo' }} />
       <Stack.Screen name="RegistrarSeguimiento_Cultivo" component={RegistrarSeguimiento_Cultivo} options={{ title: 'Registrar seguimiento de cultivo' }} />
+      <Stack.Screen name="AplicacionesList" component={Aplicaciones_InsumoList} options={{ title: 'Lista de Aplicaciones de Insumo' }} />
+      <Stack.Screen name="AplicacionDetail" component={Aplicaciones_InsumoDetail} options={{ title: 'Detalles de la aplicacion de insumo' }} />
+      <Stack.Screen name="EditAplicacion" component={EditAplicacion} options={{ title: 'Editar Aplicacion de Insumo' }} />
+      <Stack.Screen name="RegistrarAplicacion" component={RegistrarAplicacion} options={{ title: 'Registrar aplicacion de insumo' }} />
     </Stack.Navigator>
   );
 }
