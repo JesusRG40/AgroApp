@@ -29,6 +29,10 @@ import Aplicaciones_InsumoList from './View/Insumos/Aplicaciones_InsumoList';
 import Aplicaciones_InsumoDetail from './View/Insumos/Aplicacion_InsumoDetail';
 import RegistrarAplicacion from './View/Insumos/RegistrarAplicacion_Insumo';
 import EditAplicacion from './View/Insumos/EditAplicacion_Insumo';
+import UsuariosList from './View/Seguridad/UsuariosList'
+import UsuarioDetail from './View/Seguridad/UsuariosDetail'
+import RegistrarUsuario from './View/Seguridad/RegistrarUsuario';
+import EditarUsuario from './View/Seguridad/EditUsuario';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +68,10 @@ export default function StackNavigation() {
       <Stack.Screen name="AplicacionDetail" component={Aplicaciones_InsumoDetail} options={{ title: 'Detalles de la aplicacion de insumo' }} />
       <Stack.Screen name="EditAplicacion" component={EditAplicacion} options={{ title: 'Editar Aplicacion de Insumo' }} />
       <Stack.Screen name="RegistrarAplicacion" component={RegistrarAplicacion} options={{ title: 'Registrar aplicacion de insumo' }} />
+      <Stack.Screen name="UsuariosList" component={UsuariosList} options={{ title: 'Lista de Usuarios' }} />
+      <Stack.Screen name="UsuarioDetail" component={UsuarioDetail} options={{ title: 'Detalles de usuario' }} />
+      <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} options={{ title: 'Registrar usuario' }} />
+      <Stack.Screen name="EditarUsuario" component={EditarUsuario} options={{ title: 'Editar usuario' }} />
     </Stack.Navigator>
   );
 }

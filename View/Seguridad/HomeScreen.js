@@ -1,3 +1,4 @@
+// screens/HomeScreen.js
 import React from "react";
 import {
   View,
@@ -7,6 +8,7 @@ import {
   Image,
   Animated,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { useHomeController } from "../../Presenter/HomePresenter";
 
@@ -33,48 +35,57 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
 
         {menuVisible && (
-          <Animated.View style={{ opacity: fadeAnim }}>
-            <TouchableOpacity
-              style={[styles.button, styles.cultivosButton]}
-              onPress={() => navigation.navigate("CultivosList")}
-            >
-              <Text style={styles.buttonText}>Cultivos</Text>
-            </TouchableOpacity>
+          <Animated.View style={[styles.menuWrapper, { opacity: fadeAnim }]}>
+            <ScrollView contentContainerStyle={styles.menuContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.cultivosButton]}
+                onPress={() => navigation.navigate("CultivosList")}
+              >
+                <Text style={styles.buttonText}>Cultivos</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.riegosButton]}
-              onPress={() => navigation.navigate("RiegosList")}
-            >
-              <Text style={styles.buttonText}>Riegos</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.riegosButton]}
+                onPress={() => navigation.navigate("RiegosList")}
+              >
+                <Text style={styles.buttonText}>Riegos</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.historialSueloButton]}
-              onPress={() => navigation.navigate("HistorialList")}
-            >
-              <Text style={styles.buttonText}>Historial Suelo</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.historialSueloButton]}
+                onPress={() => navigation.navigate("HistorialList")}
+              >
+                <Text style={styles.buttonText}>Historial Suelo</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.costosButton]}
-              onPress={() => navigation.navigate("CostosList")}
-            >
-              <Text style={styles.buttonText}>Costos</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.costosButton]}
+                onPress={() => navigation.navigate("CostosList")}
+              >
+                <Text style={styles.buttonText}>Costos</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.insumosButton]}
-              onPress={() => navigation.navigate("InsumosList")}
-            >
-              <Text style={styles.buttonText}>Insumos</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.insumosButton]}
+                onPress={() => navigation.navigate("InsumosList")}
+              >
+                <Text style={styles.buttonText}>Insumos</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, styles.logoutButton]}
-              onPress={handleLogout}
-            >
-              <Text style={styles.buttonText}>Cerrar Sesión</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.usuariosButton]}
+                onPress={() => navigation.navigate("UsuariosList")}
+              >
+                <Text style={styles.buttonText}>Usuarios</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.button, styles.logoutButton]}
+                onPress={handleLogout}
+              >
+                <Text style={styles.buttonText}>Cerrar Sesión</Text>
+              </TouchableOpacity>
+            </ScrollView>
           </Animated.View>
         )}
       </View>
@@ -115,9 +126,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
+    paddingTop: 60, // empuja el contenido hacia abajo
   },
   logo: {
     width: 100,
@@ -143,13 +155,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  menuWrapper: {
+    marginTop: 20, // separa el menú más abajo
+    maxHeight: height * 0.6,
+  },
+  menuContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    paddingVertical: 10,
+  },
   button: {
-    width: "80%",
-    padding: 15,
-    borderRadius: 10,
+    width: "45%",
+    margin: 5,
+    paddingVertical: 10,
+    borderRadius: 8,
     alignItems: "center",
-    marginBottom: 15,
-    elevation: 3,
+    elevation: 2,
   },
   cultivosButton: {
     backgroundColor: "#4CAF50",
@@ -166,12 +188,15 @@ const styles = StyleSheet.create({
   insumosButton: {
     backgroundColor: "#FF9800",
   },
+  usuariosButton: {
+    backgroundColor: "#3F51B5",
+  },
   logoutButton: {
     backgroundColor: "#F44336",
   },
   buttonText: {
     color: "#FFF",
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "bold",
   },
 });
