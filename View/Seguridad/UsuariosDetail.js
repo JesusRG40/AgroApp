@@ -44,6 +44,16 @@ export default function UsuarioDetailScreen({ route, navigation }) {
         <Text style={styles.value}>{usuario.rol || 'N/D'}</Text>
       </View>
 
+      {/* Botón: Ver Actividades de este usuario */}
+      <TouchableOpacity
+        style={[styles.button, styles.activitiesButton]}
+        onPress={() =>
+          navigation.navigate('ActividadesUsuarioList', { idUsuario: usuario.id })
+        }
+      >
+        <Text style={styles.buttonText}>Ver Actividades</Text>
+      </TouchableOpacity>
+
       {/* Botones de acción */}
       <TouchableOpacity
         style={[styles.button, styles.editButton]}
@@ -92,6 +102,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     marginVertical: 8,
+  },
+  activitiesButton: {
+    backgroundColor: '#42A5F5', // azul para diferenciar
   },
   editButton: {
     backgroundColor: '#FFA726',

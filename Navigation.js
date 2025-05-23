@@ -33,6 +33,10 @@ import UsuariosList from './View/Seguridad/UsuariosList'
 import UsuarioDetail from './View/Seguridad/UsuariosDetail'
 import RegistrarUsuario from './View/Seguridad/RegistrarUsuario';
 import EditarUsuario from './View/Seguridad/EditUsuario';
+import ActividadesUsuarioList from './View/Seguridad/Actividades_UsuarioList';
+import ActividadUsuarioDetail from './View/Seguridad/Actividad_UsuarioDetail';
+import RegistrarActividadUsuario from './View/Seguridad/RegistrarActividad_Usuario';
+import EditarActividadUsuario from './View/Seguridad/EditActividad_Usuario';
 
 const Stack = createStackNavigator();
 
@@ -72,6 +76,10 @@ export default function StackNavigation() {
       <Stack.Screen name="UsuarioDetail" component={UsuarioDetail} options={{ title: 'Detalles de usuario' }} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} options={{ title: 'Registrar usuario' }} />
       <Stack.Screen name="EditarUsuario" component={EditarUsuario} options={{ title: 'Editar usuario' }} />
+      <Stack.Screen name="ActividadesUsuarioList" component={ActividadesUsuarioList} options={{ title: 'Lista de Actividades de Usuario' }} />
+      <Stack.Screen name="ActividadUsuarioDetail" component={ActividadUsuarioDetail} options={{ title: 'Detalles de la actividad de usuario' }} />
+      <Stack.Screen name="RegistrarActividadUsuario" component={RegistrarActividadUsuario} options={{ title: 'Registrar actividad de usuario' }} />
+      <Stack.Screen name="EditarActividadUsuario" component={EditarActividadUsuario} options={{ title: 'Editar actividad de usuario' }} />
     </Stack.Navigator>
   );
 }
