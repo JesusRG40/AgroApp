@@ -14,9 +14,28 @@ import { useHomeController } from "../../Presenter/HomePresenter";
 
 const { width, height } = Dimensions.get("window");
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, route }) {
+  // Extraemos el rol desde route.params (debe venir desde el login)
+  const { rol } = route.params || {};
+
   const { menuVisible, fadeAnim, handleToggleMenu, handleLogout } =
     useHomeController(navigation);
+
+  // Función de ayuda: verifica si el rol actual tiene acceso a cierta sección
+  const canAccess = (seccion) => {
+    switch (rol) {
+      case "Administrador":
+      case "Supervisor":
+        // Ambos ven todos los botones
+        return true;
+      case "Agricultor":
+        return seccion === "Cultivos" || seccion === "Riegos";
+      case "Tecnico de suelo":
+        return seccion === "Historial Suelo";
+      default:
+        return false;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -27,6 +46,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.content}>
         <Image source={require("../../assets/logo.png")} style={styles.logo} />
         <Text style={styles.title}>¡Bienvenido a AgroApp!</Text>
+        <Text style={styles.subtitle}>Rol: {rol}</Text>
 
         <TouchableOpacity style={styles.centralButton} onPress={handleToggleMenu}>
           <Text style={styles.centralButtonText}>
@@ -37,48 +57,61 @@ export default function HomeScreen({ navigation }) {
         {menuVisible && (
           <Animated.View style={[styles.menuWrapper, { opacity: fadeAnim }]}>
             <ScrollView contentContainerStyle={styles.menuContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.cultivosButton]}
-                onPress={() => navigation.navigate("CultivosList")}
-              >
-                <Text style={styles.buttonText}>Cultivos</Text>
-              </TouchableOpacity>
+              {canAccess("Cultivos") && (
+                <TouchableOpacity
+                  style={[styles.button, styles.cultivosButton]}
+                  onPress={() => navigation.navigate("CultivosList")}
+                >
+                  <Text style={styles.buttonText}>Cultivos</Text>
+                </TouchableOpacity>
+              )}
 
-              <TouchableOpacity
-                style={[styles.button, styles.riegosButton]}
-                onPress={() => navigation.navigate("RiegosList")}
-              >
-                <Text style={styles.buttonText}>Riegos</Text>
-              </TouchableOpacity>
+              {canAccess("Riegos") && (
+                <TouchableOpacity
+                  style={[styles.button, styles.riegosButton]}
+                  onPress={() => navigation.navigate("RiegosList")}
+                >
+                  <Text style={styles.buttonText}>Riegos</Text>
+                </TouchableOpacity>
+              )}
 
-              <TouchableOpacity
-                style={[styles.button, styles.historialSueloButton]}
-                onPress={() => navigation.navigate("HistorialList")}
-              >
-                <Text style={styles.buttonText}>Historial Suelo</Text>
-              </TouchableOpacity>
+              {canAccess("Historial Suelo") && (
+                <TouchableOpacity
+                  style={[styles.button, styles.historialSueloButton]}
+                  onPress={() => navigation.navigate("HistorialList")}
+                >
+                  <Text style={styles.buttonText}>Historial Suelo</Text>
+                </TouchableOpacity>
+              )}
 
-              <TouchableOpacity
-                style={[styles.button, styles.costosButton]}
-                onPress={() => navigation.navigate("CostosList")}
-              >
-                <Text style={styles.buttonText}>Costos</Text>
-              </TouchableOpacity>
+              {canAccess("Costos") && (
+                <TouchableOpacity
+                  style={[styles.button, styles.costosButton]}
+                  onPress={() => navigation.navigate("CostosList")}
+                >
+                  <Text style={styles.buttonText}>Costos</Text>
+                </TouchableOpacity>
+              )}
 
-              <TouchableOpacity
-                style={[styles.button, styles.insumosButton]}
-                onPress={() => navigation.navigate("InsumosList")}
-              >
-                <Text style={styles.buttonText}>Insumos</Text>
-              </TouchableOpacity>
+              {canAccess("Insumos") && (
+                <TouchableOpacity
+                  style={[styles.button, styles.insumosButton]}
+                  onPress={() => navigation.navigate("InsumosList")}
+                >
+                  <Text style={styles.buttonText}>Insumos</Text>
+                </TouchableOpacity>
+              )}
 
-              <TouchableOpacity
-                style={[styles.button, styles.usuariosButton]}
-                onPress={() => navigation.navigate("UsuariosList")}
-              >
-                <Text style={styles.buttonText}>Usuarios</Text>
-              </TouchableOpacity>
+              {canAccess("Usuarios") && (
+                <TouchableOpacity
+                  style={[styles.button, styles.usuariosButton]}
+                  onPress={() => navigation.navigate("UsuariosList")}
+                >
+                  <Text style={styles.buttonText}>Usuarios</Text>
+                </TouchableOpacity>
+              )}
 
+              {/* El botón de cerrar sesión siempre se muestra */}
               <TouchableOpacity
                 style={[styles.button, styles.logoutButton]}
                 onPress={handleLogout}
@@ -129,19 +162,24 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingTop: 60, // empuja el contenido hacia abajo
+    paddingTop: 60,
   },
   logo: {
     width: 100,
     height: 100,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 30,
+    marginBottom: 5,
     color: "#333",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
   },
   centralButton: {
     backgroundColor: "#4CAF50",
@@ -156,7 +194,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   menuWrapper: {
-    marginTop: 20, // separa el menú más abajo
+    marginTop: 20,
     maxHeight: height * 0.6,
   },
   menuContainer: {

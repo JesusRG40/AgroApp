@@ -1,3 +1,4 @@
+// screens/RecuperarPasswordScreen.js
 import React, { useState } from "react";
 import {
   View,
@@ -7,19 +8,25 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
-import { handleLogin } from "../../Presenter/AuthPresenter";
+import { handleRecoverPassword } from "../../Presenter/AuthPresenter";
 
 const { width, height } = Dimensions.get("window");
 
-export default function LoginScreen({ navigation }) {
+export default function RecuperarPasswordScreen({ navigation }) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const onPressRecover = async () => {
+    setLoading(true);
+    await handleRecoverPassword(email);
+    setLoading(false);
+  };
 
   return (
     <View style={styles.container}>
+      {/* Background decorativo igual que en LoginScreen */}
       <View style={[styles.circle, styles.circle1]} />
       <View style={[styles.circle, styles.circle2]} />
       <View style={[styles.circle, styles.circle3]} />
@@ -27,8 +34,11 @@ export default function LoginScreen({ navigation }) {
 
       <View style={styles.content}>
         <Text style={styles.logoText}>AgroApp</Text>
-        <Image source={require("../../assets/logo.png")} style={styles.logo} />
-        <Text style={styles.title}>Iniciar sesión</Text>
+        <Image
+          source={require("../../assets/logo.png")}
+          style={styles.logo}
+        />
+        <Text style={styles.title}>Recuperar Contraseña</Text>
 
         <TextInput
           style={styles.input}
@@ -38,38 +48,17 @@ export default function LoginScreen({ navigation }) {
           value={email}
           onChangeText={setEmail}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          secureTextEntry
-          autoCapitalize="none"
-          value={password}
-          onChangeText={setPassword}
-        />
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleLogin(email, password, navigation, setLoading)}
+          onPress={onPressRecover}
           disabled={loading}
         >
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Ingresar</Text>
+            <Text style={styles.buttonText}>Enviar</Text>
           )}
-        </TouchableOpacity>
-
-        {/* Nueva línea: instrucción para registrarse */}
-        <Text style={styles.infoText}>
-          Para registrarse consulte a un Administrador.
-        </Text>
-
-        {/* Nueva sección: olvido de contraseña */}
-        <TouchableOpacity
-          style={styles.linkButton}
-          onPress={() => navigation.navigate("RecuperarContra")}
-        >
-          <Text style={styles.linkText}>Olvidé la contraseña</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -136,15 +125,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-  infoText: {
-    fontSize: 14,
-    color: "#555",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  linkButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-  },
-  linkText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold" },
+  footerText: { fontSize: 16, color: "#333" },
+  linkText: { color: "#4CAF50", fontWeight: "bold" },
 });

@@ -37,6 +37,7 @@ import ActividadesUsuarioList from './View/Seguridad/Actividades_UsuarioList';
 import ActividadUsuarioDetail from './View/Seguridad/Actividad_UsuarioDetail';
 import RegistrarActividadUsuario from './View/Seguridad/RegistrarActividad_Usuario';
 import EditarActividadUsuario from './View/Seguridad/EditActividad_Usuario';
+import RecuperarContra from './View/Seguridad/RecuperarContra';
 
 const Stack = createStackNavigator();
 
@@ -80,6 +81,7 @@ export default function StackNavigation() {
       <Stack.Screen name="ActividadUsuarioDetail" component={ActividadUsuarioDetail} options={{ title: 'Detalles de la actividad de usuario' }} />
       <Stack.Screen name="RegistrarActividadUsuario" component={RegistrarActividadUsuario} options={{ title: 'Registrar actividad de usuario' }} />
       <Stack.Screen name="EditarActividadUsuario" component={EditarActividadUsuario} options={{ title: 'Editar actividad de usuario' }} />
+      <Stack.Screen name="RecuperarContra" component={RecuperarContra} options={{ title: 'Recuperar Contraseña' }} />
     </Stack.Navigator>
   );
 }
